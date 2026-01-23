@@ -1,5 +1,5 @@
 # TP1 — Segment Anything (SAM)
-
+Nom: RAKI Wiame
 ## Dépôt du projet
 Lien du dépôt Git :
 https://github.com/<username>/<repo>  
@@ -109,3 +109,25 @@ Le modèle fonctionne correctement et détecte le masque principal. L’inféren
 ### 3. Commentaire : Utilité de l’overlay pour le débogage
 
 L'overlay visuel est indispensable car les métriques brutes (comme le score de 0.654 ci-dessus) ne disent pas *pourquoi* le modèle hésite. En superposant le masque à l'image originale, on peut identifier immédiatement si le problème vient du **prompt** (une boîte qui inclut trop de contexte parasite) ou du **modèle** (qui échoue à séparer l'objet du fond à cause d'un faible contraste ou d'une texture complexe). Cela permet de distinguer une erreur de segmentation grossière (le masque couvre le mauvais objet) d'une imprécision fine (bords flous ou cheveux manquants), guidant ainsi l'ajustement des hyperparamètres.
+
+## Question 5 :
+
+### 1. Cas difficile
+
+![PCA](./img/diff1.png)
+![PCA](./img/diff2.png)
+
+### 2. Cas simple
+![PCA](./img/simple.png)
+Voici le tableau récapitulatif des tests effectués et l'analyse du comportement de la BBox.
+
+### Tableau des résultats
+
+| Image (Fichier) | BBox `[x1, y1, x2, y2]` | Score | Aire (px²) | Temps (ms) |
+| --- | --- | --- | --- | --- |
+| **erik-eastman-4HG5hlhmZg8-unsplash.jpg** | `[0, 0, 2980, 4419]` | 0.922 | 7 425 313 | 1739.5 |
+| **borna-hrzina-8IPrifbjo-0-unsplash.jpg** | `[0, 0, 3006, 4012]` | 0.949 | 10 329 487 | 1708.3 |
+| **andrej-lisakov-3A4XZUopCJA-unsplash.jpg** | `[0, 13, 5199, 3562]` | 1.000 | 17 367 054 | 1802.5 |
+
+### Debug : Impact de la taille de la BBox
+Lorsqu'on **rétrécit** la bbox pour qu'elle épouse strictement les contours de l'objet, on réduit l'ambiguïté contextuelle : le modèle se concentre sur les détails internes et exclut le fond, ce qui produit un masque plus utile et précis, même si le score de confiance peut parfois baisser légèrement (car la tâche devient plus complexe que de simplement détourer un rectangle). À l'inverse, si on **agrandit** trop la bbox (comme dans les résultats ci-dessus où elle couvre toute l'image), SAM a tendance à segmenter l'objet "dominant" le plus évident, qui est souvent le fond ou la scène entière. Cela explique les scores très élevés (proches de 1.0) et les aires gigantesques : le modèle a réussi sa segmentation technique, mais n'a pas isolé l'objet spécifique qu'on visait.
