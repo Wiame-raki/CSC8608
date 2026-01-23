@@ -77,3 +77,15 @@ device_count 1
 ![PCA](./img/mockup-graphics-_mUVHhvBYZ0-unsplash.jpg)
 ### Cas complexe:
 ![PCA](./img/adrian-rosco-stef-KGw1AOyBTQM-unsplash.jpg)
+
+## Question 3 :
+
+**Modèle choisi :** `vit_h`
+**Checkpoint utilisé :** `sam_vit_h_4b8939.pth`
+
+**Sortie du test rapide :**
+
+![PCA](./img/quicktest.png)
+
+**Premier constat :**
+Le modèle fonctionne correctement et détecte le masque principal. L’inférence est un peu lente sur des images de très haute résolution (ici 5472×3648). On remarque que certains détails fins ne sont pas parfaitement segmentés, mais globalement le masque est cohérent. Ce test permet de vérifier que l’intégration de SAM avec le SamPredictor est opérationnelle.
