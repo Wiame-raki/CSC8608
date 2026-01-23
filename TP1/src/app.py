@@ -97,3 +97,33 @@ if do_segment:
         OUT_DIR.mkdir(parents=True, exist_ok=True)
         out_path = OUT_DIR / f"overlay_{img_path.stem}.png"
         cv2.imwrite(str(out_path), c_)
+    # --- Prévisualisation de la bounding box (avant segmentation) ---
+def draw_box_preview(image_rgb: np.ndarray, box_xyxy: np.ndarray) -> np.ndarray:
+    preview = image_rgb.copy()
+    bgr = cv2.cvtColor(preview, cv2.COLOR_RGB2BGR)
+
+    x1, y1, x2, y2 = [int(v) for v in box_xyxy.tolist()]
+    cv2.rectangle(
+        bgr,
+        (x1, y1),
+        (x2, y2),
+        color=(0, 255, 0),   # vert
+        thickness=2
+    )
+
+    return cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
+
+
+preview = draw_box_preview(img, box)
+st.image(
+    preview,
+    caption="Prévisualisation : bounding box (avant segmentation)",
+    use_container_width=True
+)
+
+# --- Bonus UX : avertissement bbox trop petite ---
+MIN_BOX_SIZE = 30  # pixels
+
+if (x_max - x_min) < MIN_BOX_SIZE or (y_max - y_min) < MIN_BOX_SIZE:
+    st.warning(" BBox très petite : la segmentation risque d’être mauvaise. Essayez une bbox plus large.")
+
