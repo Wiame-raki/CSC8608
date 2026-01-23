@@ -1,3 +1,8 @@
+import numpy as np
+import cv2
+from pathlib import Path
+
+# Then your function:
 def load_image_rgb(path: Path, max_dim: int = 1024) -> np.ndarray:
     """
     Charge une image, convertit en RGB et redimensionne si nécessaire
