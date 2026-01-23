@@ -96,4 +96,4 @@ if do_segment:
     if save:
         OUT_DIR.mkdir(parents=True, exist_ok=True)
         out_path = OUT_DIR / f"overlay_{img_path.stem}.png"
-        cv2.imwrite(str(out_path), c_
+        cv2.imwrite(str(out_path), c_)
