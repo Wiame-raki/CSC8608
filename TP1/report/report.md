@@ -89,3 +89,23 @@ device_count 1
 
 **Premier constat :**
 Le modèle fonctionne correctement et détecte le masque principal. L’inférence est un peu lente sur des images de très haute résolution (ici 5472×3648). On remarque que certains détails fins ne sont pas parfaitement segmentés, mais globalement le masque est cohérent. Ce test permet de vérifier que l’intégration de SAM avec le SamPredictor est opérationnelle.
+
+## Question 4 :
+
+### 1. Vignette d’un overlay produit
+
+
+![PCA](./img/overlay.png)
+![PCA](./img/overlay_hesam-link-ZPl1v83Im_I-unsplash.png)
+
+### 2. Tableau récapitulatif (Sélection de 3 images)
+
+| Image (Fichier) | Score (Confiance) | Aire (px²) | Périmètre (px) |
+| --- | --- | --- | --- |
+| **christian-ladewig-T0iFfJw-rB0-unsplash** (Cas simple) | 0.986 | 54230 | 990.1 |
+| **yoav-aziz-tKCd-IWc4gI-unsplash** (Cas chargé) | 0.944 | 39730 | 901.0 |
+| **joacim-bohlander-qCVaEhS9Jnk-unsplash** (Score bas) | 0.654 | 10582 | 739.4 |
+
+### 3. Commentaire : Utilité de l’overlay pour le débogage
+
+L'overlay visuel est indispensable car les métriques brutes (comme le score de 0.654 ci-dessus) ne disent pas *pourquoi* le modèle hésite. En superposant le masque à l'image originale, on peut identifier immédiatement si le problème vient du **prompt** (une boîte qui inclut trop de contexte parasite) ou du **modèle** (qui échoue à séparer l'objet du fond à cause d'un faible contraste ou d'une texture complexe). Cela permet de distinguer une erreur de segmentation grossière (le masque couvre le mauvais objet) d'une imprécision fine (bords flous ou cheveux manquants), guidant ainsi l'ajustement des hyperparamètres.
