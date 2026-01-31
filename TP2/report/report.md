@@ -74,22 +74,25 @@ Nom: RAKI Wiame
 ### Analyse Qualitative de l'Effet du `strength`
 
 *   **Ce qui est conservé à travers les `strengths`** :
-    *   La composition générale et le cadrage de l'objet (le soulier) restent globalement intacts. Le modèle ne réinvente pas la pose du produit.
-    *   L'identité fondamentale du produit (un soulier de course rouge) est préservée, même à `strength` élevé.
+    *   La composition générale et le cadrage de l'objet (le soulier orienté vers la gauche) restent globalement intacts. Le modèle ne réinvente pas la pose du produit.
+    *   L'identité fondamentale du produit (un soulier rouge) est préservée, même si les détails et le style changent.
 
 *   **Ce qui change avec l'augmentation du `strength`** :
     *   **Strength = 0.35 (Run 07)**:
-        *   Les changements sont minimes et cosmétiques. La structure de l'image source est presque parfaitement conservée.
-        *   On observe une légère modification des micro-textures du soulier et une modification du texte.
+        *   Les changements sont subtils. La structure de l'image source est presque parfaitement conservée.
+        *   Le logo sur le côté de la chaussure est  déformé.
     *   **Strength = 0.60 (Run 08)**:
-        *   Le modèle dispose d'assez de liberté pour réinterpréter l'image. Le style visuel change de manière notable.
-        *   La texture du soulier est modifiée, et l'arrière-plan est complètement remplacé par un fond blanc pur, comme demandé dans le prompt. L'éclairage est recalculé pour simuler un éclairage de studio plus franc.
+        *   L'image est une réinterprétation claire. Le style visuel change de manière notable.
+        *   La forme du soulier change. 
     *   **Strength = 0.85 (Run 09)**:
-        *   Les modifications sont drastiques. La forme générale du soulier est reconnaissable, mais ses détails (lacets, semelle, logo) sont complètement réinventés par le modèle. La texture et la couleur s'écartent significativement de l'original.
+        *   Les modifications sont drastiques et l'image s'éloigne de la source. La forme générale du soulier change radicalement: la forme de la semelle et le design sont complètement réinventés par le modèle.
+        *   La couleur rouge persiste.
 
 
 ### Commentaire sur l'utilisabilité E-commerce
 
-*   Un `strength` faible **(0.35)** est utile pour du "retouching" ou "clean-up" via IA (ex: améliorer un fond, corriger des défauts mineurs) sans altérer le produit.
-*   Un `strength` moyen **(0.60)** est idéal pour du "re-styling" de catalogue : changer l'ambiance, le fond ou l'éclairage d'une série de photos de produits tout en conservant leur apparence fondamentale.
-*   Un `strength` élevé **(0.85)** présente un **risque commercial majeur**. L'image générée peut ne plus correspondre au produit réel vendu, ce qui est inacceptable pour le e-commerce (problème de non-conformité). Il peut être utilisé pour de la création de concepts ou de la direction artistique, mais pas pour générer la photo d'un produit existant.
+*   Un `strength` faible **(0.35)** est parfait pour des tâches de nettoyage ("clean-up") ou de légères retouches, comme uniformiser un arrière-plan ou corriger de petits défauts, sans risquer d'altérer l'apparence du produit.
+*   Un `strength` moyen **(0.60)** est idéal pour du "re-styling" de catalogue. Il permet de standardiser une série de photos de produits sur un même fond et sous un même éclairage, ce qui est très utile pour l'homogénéité d'un site e-commerce.
+*   Un `strength` élevé **(0.85)** présente un **risque commercial majeur** pour la photographie de produit. L'image générée ne correspond plus au produit qui serait expédié au client, créant un problème de non-conformité. Ce niveau de `strength` est à réserver pour de la recherche de concepts, de la publicité créative ou de la direction artistique, mais ne doit pas être utilisé pour représenter un produit existant.
+
+
