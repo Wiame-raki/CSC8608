@@ -95,4 +95,52 @@ Nom: RAKI Wiame
 *   Un `strength` moyen **(0.60)** est idéal pour du "re-styling" de catalogue. Il permet de standardiser une série de photos de produits sur un même fond et sous un même éclairage, ce qui est très utile pour l'homogénéité d'un site e-commerce.
 *   Un `strength` élevé **(0.85)** présente un **risque commercial majeur** pour la photographie de produit. L'image générée ne correspond plus au produit qui serait expédié au client, créant un problème de non-conformité. Ce niveau de `strength` est à réserver pour de la recherche de concepts, de la publicité créative ou de la direction artistique, mais ne doit pas être utilisé pour représenter un produit existant.
 
+## Question 5:
+**Img2Img**:
+![Baseline](./img/img2img1.png)
+![Baseline](./img/img2img2.png)
+![Baseline](./img/img2img3.png)
+**Text2Img**:
+![Baseline](./img/text2img1.png)
+![Baseline](./img/text2img2.png)
+![Baseline](./img/text2img3.png)
 
+## Question 6: Évaluation et Réflexion
+
+### 6.1 Grille d'évaluation "light"
+
+
+#### Évaluation 1 : Text2Img Baseline (`run01_baseline`)
+
+*   **Prompt adherence**: 2/2
+*   **Visual realism**: 2/2
+*   **Artifacts**: 2/2
+*   **E-commerce usability**: 2/2
+*   **Reproducibility**: 2/2
+*   **TOTAL**: **10/10**
+*   **Justification**: L'image est de haute qualité, suit parfaitement le prompt, ne contient aucun artefact visible et est directement utilisable dans un contexte e-commerce. Les paramètres étant tous connus, elle est parfaitement reproductible.
+
+#### Évaluation 2 : Text2Img Guidance Élevé (`run05_guid12`)
+
+*   **Prompt adherence**: 2/2
+*   **Visual realism**: 1/2
+*   **Artifacts**: 1/2
+*   **E-commerce usability**: 1/2
+*   **Reproducibility**: 2/2
+*   **TOTAL**: **7/10**
+*   **Justification**: La `guidance` élevée force une adhésion stricte au prompt, mais dégrade le réalisme en sur-saturant les couleurs. Des artefacts de contraste apparaissent. L'image nécessiterait des retouches colorimétriques importantes pour être utilisable.
+
+#### Évaluation 3 : Img2Img Strength Élevé (`run09_strength085`)
+
+*   **Prompt adherence**: 1/2
+*   **Visual realism**: 1/2
+*   **Artifacts**: 1/2
+*   **E-commerce usability**: 0/2
+*   **Reproducibility**: 2/2
+*   **TOTAL**: **5/10**
+*   **Justification**: Le `strength` élevé fait dériver l'image de manière trop importante. Bien qu'elle respecte l'idée du prompt, elle ne représente plus le produit source, la rendant totalement inutilisable pour la vente du produit original (risque de non-conformité).
+
+
+### 6.2 Réflexion
+
+Le déploiement de modèles de diffusion en e-commerce impose un arbitrage constant. Le compromis **qualité/coût** est le plus évident : augmenter les `steps` de 20 à 40 améliore la finesse des détails, mais double le temps d'inférence (et donc le coût de calcul), pour un gain parfois marginal. Le choix d'un scheduler plus rapide comme `EulerA` peut atténuer ce coût. La **reproductibilité** est un autre enjeu majeur ; si la `seed`, le `prompt` et les hyperparamètres assurent une base stable, des mises à jour du modèle ou des optimisations bas niveau (xFormers, CUDA) peuvent introduire de légères variations, cassant une reproductibilité parfaite. Enfin, les **risques métier** sont critiques : comme observé avec `strength=0.85`, le modèle peut halluciner des détails (logos, formes) qui ne correspondent plus au produit réel, créant un risque de tromperie du client. Pour limiter cela, il faudrait mettre en place des garde-fous : borner les paramètres (ex: `strength < 0.7`), utiliser des prompts très précis, et surtout, intégrer une étape de validation humaine ou un modèle de similarité (CLIP score) pour vérifier que l'image générée reste fidèle à l'image source avant toute publication.
