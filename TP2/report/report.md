@@ -19,7 +19,7 @@ Nom: RAKI Wiame
 *   **Échelle de guidage (guidance_scale)**: `7.5`
 *   **Dimensions**: `512x512`
 
-## Expérimentations text2img
+## Question 3:
 
 
 **Paramètres des expériences**
@@ -59,3 +59,37 @@ Nom: RAKI Wiame
 
 *   **Impact du `Scheduler`**:
     *   **Run 1 (EulerA) vs Run 6 (DDIM)**: `EulerA` a produit un rendu plus doux, avec des transitions douces. `DDIM` produit des images avec des textures plus "dures" et des détails plus marqués et plus réalistes. 
+
+
+
+## Question 4:
+
+### Grille de comparaison visuelle
+
+| Image Source | Strength = 0.35 | Strength = 0.60 | Strength = 0.85 |
+| :---: | :---: | :---: | :---: |
+| ![Source](../inputs/product.jpg) | ![Strength 0.35](../outputs/i2i_run07_strength035.png) | ![Strength 0.60](../outputs/i2i_run08_strength060.png) | ![Strength 0.85](../outputs/i2i_run09_strength085.png) |
+
+
+### Analyse Qualitative de l'Effet du `strength`
+
+*   **Ce qui est conservé à travers les `strengths`** :
+    *   La composition générale et le cadrage de l'objet (le soulier) restent globalement intacts. Le modèle ne réinvente pas la pose du produit.
+    *   L'identité fondamentale du produit (un soulier de course rouge) est préservée, même à `strength` élevé.
+
+*   **Ce qui change avec l'augmentation du `strength`** :
+    *   **Strength = 0.35 (Run 07)**:
+        *   Les changements sont minimes et cosmétiques. La structure de l'image source est presque parfaitement conservée.
+        *   On observe une légère modification des micro-textures du soulier et une modification du texte.
+    *   **Strength = 0.60 (Run 08)**:
+        *   Le modèle dispose d'assez de liberté pour réinterpréter l'image. Le style visuel change de manière notable.
+        *   La texture du soulier est modifiée, et l'arrière-plan est complètement remplacé par un fond blanc pur, comme demandé dans le prompt. L'éclairage est recalculé pour simuler un éclairage de studio plus franc.
+    *   **Strength = 0.85 (Run 09)**:
+        *   Les modifications sont drastiques. La forme générale du soulier est reconnaissable, mais ses détails (lacets, semelle, logo) sont complètement réinventés par le modèle. La texture et la couleur s'écartent significativement de l'original.
+
+
+### Commentaire sur l'utilisabilité E-commerce
+
+*   Un `strength` faible **(0.35)** est utile pour du "retouching" ou "clean-up" via IA (ex: améliorer un fond, corriger des défauts mineurs) sans altérer le produit.
+*   Un `strength` moyen **(0.60)** est idéal pour du "re-styling" de catalogue : changer l'ambiance, le fond ou l'éclairage d'une série de photos de produits tout en conservant leur apparence fondamentale.
+*   Un `strength` élevé **(0.85)** présente un **risque commercial majeur**. L'image générée peut ne plus correspondre au produit réel vendu, ce qui est inacceptable pour le e-commerce (problème de non-conformité). Il peut être utilisé pour de la création de concepts ou de la direction artistique, mais pas pour générer la photo d'un produit existant.
