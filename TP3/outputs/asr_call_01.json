@@ -1,0 +1,89 @@
+{
+  "audio_path": "TP3/data/call_01.wav",
+  "model_id": "openai/whisper-tiny",
+  "device": "cpu",
+  "audio_duration_s": 41.664,
+  "elapsed_s": 6.075945615768433,
+  "rtf": 0.1458320280282362,
+  "segments": [
+    {
+      "segment_id": 0,
+      "start_s": 2.018,
+      "end_s": 4.062,
+      "text": "for calling customer support."
+    },
+    {
+      "segment_id": 1,
+      "start_s": 4.482,
+      "end_s": 7.23,
+      "text": "My name is Alex and I will help you today."
+    },
+    {
+      "segment_id": 2,
+      "start_s": 7.874,
+      "end_s": 11.39,
+      "text": "I'm calling about an order that's arrived damaged."
+    },
+    {
+      "segment_id": 3,
+      "start_s": 11.842,
+      "end_s": 14.014,
+      "text": "The package was delivered yesterday."
+    },
+    {
+      "segment_id": 4,
+      "start_s": 14.53,
+      "end_s": 15.87,
+      "text": "What this crease crack?"
+    },
+    {
+      "segment_id": 5,
+      "start_s": 16.738,
+      "end_s": 20.51,
+      "text": "I would like a refund or replacement as soon as possible."
+    },
+    {
+      "segment_id": 6,
+      "start_s": 21.378,
+      "end_s": 22.878,
+      "text": "The order number is."
+    },
+    {
+      "segment_id": 7,
+      "start_s": 23.17,
+      "end_s": 26.846,
+      "text": "AX1973."
+    },
+    {
+      "segment_id": 8,
+      "start_s": 28.258,
+      "end_s": 32.542,
+      "text": "You can reach me reach me at drone.smail.example.com."
+    },
+    {
+      "segment_id": 9,
+      "start_s": 33.25,
+      "end_s": 33.886,
+      "text": "Awesome."
+    },
+    {
+      "segment_id": 10,
+      "start_s": 34.082,
+      "end_s": 35.646,
+      "text": "My phone number is"
+    },
+    {
+      "segment_id": 11,
+      "start_s": 36.002,
+      "end_s": 37.342,
+      "text": "5, 5, 5."
+    },
+    {
+      "segment_id": 12,
+      "start_s": 37.73,
+      "end_s": 39.87,
+      "text": "See you all one, nine, nine."
+    }
+  ],
+  "full_text": "for calling customer support. My name is Alex and I will help you today. I'm calling about an order that's arrived damaged. The package was delivered yesterday. What this crease crack? I would like a refund or replacement as soon as possible. The order number is. AX1973. You can reach me reach me at drone.smail.example.com. Awesome. My phone number is 5, 5, 5. See you all one, nine, nine."
+}

@@ -1,0 +1,62 @@
+{
+  "audio_path": "TP3/data/call_01.wav",
+  "model_id": "openai/whisper-tiny",
+  "device": "cpu",
+  "audio_duration_s": 41.664,
+  "elapsed_s": 6.075945615768433,
+  "rtf": 0.1458320280282362,
+  "pii_stats": {
+    "emails": 1,
+    "phones": 0,
+    "orders": 0
+  },
+  "intent_scores": {
+    "refund_or_replacement": 3,
+    "delivery_issue": 6,
+    "general_support": 4
+  },
+  "intent": "delivery_issue",
+  "top_terms": [
+    [
+      "calling",
+      2
+    ],
+    [
+      "order",
+      2
+    ],
+    [
+      "number",
+      2
+    ],
+    [
+      "reach",
+      2
+    ],
+    [
+      "customer",
+      1
+    ],
+    [
+      "support",
+      1
+    ],
+    [
+      "name",
+      1
+    ],
+    [
+      "alex",
+      1
+    ],
+    [
+      "will",
+      1
+    ],
+    [
+      "help",
+      1
+    ]
+  ],
+  "redacted_text": "4 calling customer support.my name is alex and i will help you today.im calling about an order thats arrived damaged.the package was delivered yesterday.what this crease crack? i would like a refund or replacement as soon as possible.the order number is.ax 1973.you can reach me reach [REDACTED_EMAIL] phone number is 5, 5, 5.see you all 1, 9, 9."
+}
