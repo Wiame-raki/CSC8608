@@ -1,55 +1,69 @@
-# TP4/src/train.py (version avec --model)
+# TP4/src/train.py (ajout sage + NeighborLoader)
 from __future__ import annotations
 import argparse
 import yaml
 import torch
-import time
 import torch.nn as nn
 
+from torch_geometric.loader import NeighborLoader
+
 from data import load_cora
-from models import MLP, GCN
+from models import MLP, GCN, GraphSAGE
 from utils import set_seed, Timer, compute_metrics
 
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser()
     p.add_argument("--config", type=str, required=True)
-    p.add_argument("--model", type=str, choices=["mlp", "gcn"], required=True)
+    p.add_argument("--model", type=str, choices=["mlp", "gcn", "sage"], required=True)
     return p.parse_args()
+
+
+def build_model(args_model: str, cfg: dict, num_features: int, num_classes: int, device: torch.device):
+    if args_model == "mlp":
+        return MLP(
+            in_dim=num_features,
+            hidden_dim=int(cfg["mlp"]["hidden_dim"]),
+            out_dim=num_classes,
+            dropout=float(cfg["mlp"]["dropout"]),
+        ).to(device)
+
+    if args_model == "gcn":
+        return GCN(
+            in_dim=num_features,
+            hidden_dim=int(cfg["gcn"]["hidden_dim"]),
+            out_dim=num_classes,
+            dropout=float(cfg["gcn"]["dropout"]),
+        ).to(device)
+
+    return GraphSAGE(
+        in_dim=num_features,
+        hidden_dim=int(cfg["sage"]["hidden_dim"]),
+        out_dim=num_classes,
+        dropout=float(cfg["sage"]["dropout"]),
+    ).to(device)
 
 
 def main() -> None:
     args = parse_args()
     cfg = yaml.safe_load(open(args.config, "r", encoding="utf-8"))
-
     set_seed(int(cfg["seed"]))
 
     device_str = cfg.get("device", "cuda")
     device = torch.device(device_str if torch.cuda.is_available() else "cpu")
 
     data = load_cora()
-    x = data.x.to(device)
-    y = data.y.to(device)
-    edge_index = data.edge_index.to(device)
+    pyg_data = data.pyg_data.to(device)
 
-    train_mask = data.train_mask.to(device)
-    val_mask = data.val_mask.to(device)
-    test_mask = data.test_mask.to(device)
+    x = pyg_data.x
+    y = pyg_data.y
+    edge_index = pyg_data.edge_index
 
-    if args.model == "mlp":
-        model = MLP(
-            in_dim=data.num_features,
-            hidden_dim=int(cfg["mlp"]["hidden_dim"]),
-            out_dim=data.num_classes,
-            dropout=float(cfg["mlp"]["dropout"]),
-        ).to(device)
-    else:
-        model = GCN(
-            in_dim=data.num_features,
-            hidden_dim=int(cfg["gcn"]["hidden_dim"]),
-            out_dim=data.num_classes,
-            dropout=float(cfg["gcn"]["dropout"]),
-        ).to(device)
+    train_mask = pyg_data.train_mask
+    val_mask = pyg_data.val_mask
+    test_mask = pyg_data.test_mask
+
+    model = build_model(args.model, cfg, data.num_features, data.num_classes, device)
 
     optimizer = torch.optim.Adam(
         model.parameters(),
@@ -63,23 +77,65 @@ def main() -> None:
     print("model:", args.model)
     print("epochs:", epochs)
 
+    # --- NeighborLoader only for GraphSAGE training ---
+    if args.model == "sage":
+        bs = int(cfg["sampling"]["batch_size"])
+        n1 = int(cfg["sampling"]["num_neighbors_l1"])
+        n2 = int(cfg["sampling"]["num_neighbors_l2"])
+        train_loader = NeighborLoader(
+            pyg_data,
+            input_nodes=train_mask,
+            num_neighbors=[n1, n2],
+            batch_size=bs,
+            shuffle=True,
+        )
+    else:
+        train_loader = None
+
     total_train_s = 0.0
     train_start = time.time()
     for epoch in range(1, epochs + 1):
         model.train()
-        with Timer() as t:
-            if args.model == "mlp":
-                logits = model(x)
-            else:
-                logits = model(x, edge_index)
 
-            loss = criterion(logits[train_mask], y[train_mask])
+        if args.model in ["mlp", "gcn"]:
+            with Timer() as t:
+                if args.model == "mlp":
+                    logits = model(x)
+                else:
+                    logits = model(x, edge_index)
 
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-        total_train_s += t.elapsed_s
+                loss = criterion(logits[train_mask], y[train_mask])
 
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+            total_train_s += t.elapsed_s
+
+        else:
+            # GraphSAGE: mini-batch training on sampled subgraphs
+            with Timer() as t:
+                total_loss = 0.0
+                for batch in train_loader:
+                    batch = batch.to(device)
+
+                    out = model(batch.x, batch.edge_index)
+
+                    seed_size = int(batch.batch_size)  # nodes we asked to sample around
+                    out_seed = out[:seed_size]
+                    y_seed = batch.y[:seed_size]
+
+                    loss = criterion(out_seed, y_seed)
+
+                    optimizer.zero_grad()
+                    loss.backward()
+                    optimizer.step()
+
+                    total_loss += float(loss.item())
+
+            total_train_s += t.elapsed_s
+            loss = torch.tensor(total_loss / max(1, len(train_loader)))
+
+        # --- Evaluation (full-batch for simplicity on Cora) ---
         model.eval()
         with torch.no_grad():
             if args.model == "mlp":
@@ -91,7 +147,7 @@ def main() -> None:
             m_val = compute_metrics(logits[val_mask], y[val_mask], data.num_classes)
             m_test = compute_metrics(logits[test_mask], y[test_mask], data.num_classes)
 
-        if epoch == 1 or epoch % 20 == 0 or epoch == epochs:
+        if epoch == 1 or epoch % 10 == 0 or epoch == epochs:
             print(
                 f"epoch={epoch:03d} "
                 f"loss={loss.item():.4f} "
@@ -107,4 +163,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-    
