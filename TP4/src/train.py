@@ -89,6 +89,7 @@ def main() -> None:
             num_neighbors=[n1, n2],
             batch_size=bs,
             shuffle=True,
+            subgraph_type='induced',
         )
     else:
         train_loader = None
