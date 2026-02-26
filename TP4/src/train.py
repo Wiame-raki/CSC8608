@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import yaml
 import torch
+import time
 import torch.nn as nn
 
 from torch_geometric.loader import NeighborLoader
