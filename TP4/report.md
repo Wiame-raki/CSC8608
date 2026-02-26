@@ -1,5 +1,7 @@
+# TP4:
+
 ## Question 2:
-![Q7c JSON](assets/q2.png)
+![Q7c JSON](assets/qst2.png)
 On calcule les métriques séparément sur `train_mask`, `val_mask` et `test_mask` pour respecter un protocole d’évaluation propre et exploitable en pratique.
 Le **train_mask** permet de suivre la dynamique d’apprentissage (est-ce que la loss baisse, est-ce que le modèle apprend réellement le signal ?).
 Le **val_mask** sert à piloter les décisions d’ingénierie : tuning d’hyperparamètres, early stopping, choix d’architecture.
