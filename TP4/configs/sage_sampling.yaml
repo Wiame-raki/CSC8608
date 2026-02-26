@@ -1,0 +1,10 @@
+seed: 42
+epochs: 200
+lr: 0.01
+weight_decay: 0.0005
+
+sage:
+  hidden_dim: 64
+  dropout: 0.5
+  batch_size: 64
+  num_neighbors: [10, 5]
