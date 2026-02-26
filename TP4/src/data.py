@@ -1,14 +1,11 @@
-# TP4/src/data.py (mise à jour)
 import os
 from dataclasses import dataclass
 import torch
 from torch_geometric.datasets import Planetoid
-from torch_geometric.data import Data
 
 
 @dataclass
 class CoraData:
-    pyg_data: Data
     x: torch.Tensor
     y: torch.Tensor
     edge_index: torch.Tensor
@@ -21,14 +18,13 @@ class CoraData:
 
 def load_cora() -> CoraData:
     root = os.environ.get("PYG_DATA_ROOT", os.path.expanduser("~/.cache/pyg_data"))
-    dataset = Planetoid(root=root, name="Cora")
+    dataset = Planetoid(root=root, name="Cora")  # nom du dataset
     data = dataset[0]
 
     return CoraData(
-        pyg_data=data,
         x=data.x,
         y=data.y,
-        edge_index=data.edge_index,
+        edge_index=data.edge_index,  # ajout de l'index des arêtes
         train_mask=data.train_mask,
         val_mask=data.val_mask,
         test_mask=data.test_mask,

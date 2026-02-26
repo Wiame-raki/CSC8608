@@ -23,15 +23,7 @@ from models import MLP, GCN, GraphSAGE
 
 
 def sync_if_cuda(device: torch.device) -> None:
-    """Synchronize CUDA stream before stopping the clock.
 
-    On CPU this is a no-op. On CUDA, torch operations are asynchronous:
-    results appear immediately but computation may still be queued on the GPU.
-    Calling torch.cuda.synchronize() forces the CPU to wait until the GPU has
-    finished all pending kernels, giving us an accurate wall-clock measurement.
-    Omitting this step would chronically under-report GPU forwad times because
-    we would stop the clock before the GPU has actually produced the output.
-    """
     if device.type == "cuda":
         torch.cuda.synchronize()
 
