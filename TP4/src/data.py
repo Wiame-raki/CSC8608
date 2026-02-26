@@ -30,3 +30,4 @@ def load_cora() -> CoraData:
         num_features=dataset.num_node_features,
         num_classes=dataset.num_classes,
     )
+
