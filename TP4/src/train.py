@@ -1,19 +1,19 @@
-# TP4/src/train.py
+# TP4/src/train.py (version avec --model)
 from __future__ import annotations
 import argparse
 import yaml
 import torch
 import torch.nn as nn
-import time
 
 from data import load_cora
-from models import MLP
+from models import MLP, GCN
 from utils import set_seed, Timer, compute_metrics
 
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser()
     p.add_argument("--config", type=str, required=True)
+    p.add_argument("--model", type=str, choices=["mlp", "gcn"], required=True)
     return p.parse_args()
 
 
@@ -29,17 +29,26 @@ def main() -> None:
     data = load_cora()
     x = data.x.to(device)
     y = data.y.to(device)
+    edge_index = data.edge_index.to(device)
 
     train_mask = data.train_mask.to(device)
     val_mask = data.val_mask.to(device)
     test_mask = data.test_mask.to(device)
 
-    model = MLP(
-        in_dim=data.num_features,
-        hidden_dim=int(cfg["mlp"]["hidden_dim"]),
-        out_dim=data.num_classes,
-        dropout=float(cfg["mlp"]["dropout"]),
-    ).to(device)
+    if args.model == "mlp":
+        model = MLP(
+            in_dim=data.num_features,
+            hidden_dim=int(cfg["mlp"]["hidden_dim"]),
+            out_dim=data.num_classes,
+            dropout=float(cfg["mlp"]["dropout"]),
+        ).to(device)
+    else:
+        model = GCN(
+            in_dim=data.num_features,
+            hidden_dim=int(cfg["gcn"]["hidden_dim"]),
+            out_dim=data.num_classes,
+            dropout=float(cfg["gcn"]["dropout"]),
+        ).to(device)
 
     optimizer = torch.optim.Adam(
         model.parameters(),
@@ -50,6 +59,7 @@ def main() -> None:
 
     epochs = int(cfg["epochs"])
     print("device:", device)
+    print("model:", args.model)
     print("epochs:", epochs)
 
     total_train_s = 0.0
@@ -57,7 +67,11 @@ def main() -> None:
     for epoch in range(1, epochs + 1):
         model.train()
         with Timer() as t:
-            logits = model(x)
+            if args.model == "mlp":
+                logits = model(x)
+            else:
+                logits = model(x, edge_index)
+
             loss = criterion(logits[train_mask], y[train_mask])
 
             optimizer.zero_grad()
@@ -67,7 +81,10 @@ def main() -> None:
 
         model.eval()
         with torch.no_grad():
-            logits = model(x)
+            if args.model == "mlp":
+                logits = model(x)
+            else:
+                logits = model(x, edge_index)
 
             m_train = compute_metrics(logits[train_mask], y[train_mask], data.num_classes)
             m_val = compute_metrics(logits[val_mask], y[val_mask], data.num_classes)
