@@ -21,7 +21,6 @@ Ici, on évalue à chaque epoch car Cora est petit ; sur un graphe industriel be
 | **MLP**  | 0.5940 | 0.5798 | 0.7189 |
 | **GCN** | **0.8070** | **0.8009** | 1.1699 |
 
----
 
 ### Pourquoi le GCN surpasse-t-il le MLP ici ?
 
