@@ -96,7 +96,7 @@ Le modèle fonctionne correctement et détecte le masque principal. L’inféren
 
 
 ![PCA](./img/overlay.png)
-![PCA](./img/overlay_hesam-link-ZPl1v83Im_I-unsplash.png)
+![PCA](./outputs/overlay/overlay_hesam-link-ZPl1v83Im_I-unsplash.png)
 
 ### 2. Tableau récapitulatif (Sélection de 3 images)
 
