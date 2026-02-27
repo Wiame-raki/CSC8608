@@ -13,7 +13,6 @@ Ici, on évalue à chaque epoch car Cora est petit ; sur un graphe industriel be
 ![Q7c JSON](assets/q3.1.png)
 ### GCN :
 ![Q7c JSON](assets/q3.2.png)
-Voici une synthèse comparative de vos résultats sur le dataset Cora, suivie d'une analyse de la performance des modèles.
 
 ### Comparaison des performances
 
