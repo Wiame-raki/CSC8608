@@ -28,7 +28,6 @@ L'agent PPO a considérablement optimisé sa consommation par rapport à un agen
 ## Question 3:
 ![Q7c JSON](assets/ex3.png)
 ![Q7c JSON](assets/hacked_agent.gif)
-Voici une version corrigée, plus professionnelle et concise, adaptée à un rapport 
 > **Note :** J'ai ajouté `model_cheap.save("ppo_hacked_model")` au code afin de sauvegarder le modèle et de le réutiliser lors de l'exercice suivant.
 
 ### Description de la stratégie 
