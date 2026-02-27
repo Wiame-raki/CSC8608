@@ -6,7 +6,7 @@
 | ![Q7c JSON](assets/gradcam_normal_1.png) | ![Q7c JSON](assets/gradcam_normal_2.png) | ![Q7c JSON](assets/gradcam_pneumo_1.png)| ![Q7c JSON](assets/gradcam_pneumo_2.png)|
 | --- | --- | --- | --- |
 |  |  |  |  |
-| Pred: NORMAL | Pred: NORMAL | Pred: PNEUMONIA | Pred: PNEUMONIA |
+| NORMAL 1|  NORMAL 1 | PNEUMONIA 1|  PNEUMONIA 2|
 
 
 ### 2. Analyse des Faux Positifs (Effet Clever Hans)
@@ -32,7 +32,7 @@ est le prix à payer pour accéder aux concepts sémantiques de haut niveau appr
 | ![Q7c JSON](assets/ig_smooth_normal_1.png) | ![Q7c JSON](assets/ig_smooth_normal_2.png) | ![Q7c JSON](assets/ig_smooth_pneumo_1.png)| ![Q7c JSON](assets/ig_smooth_pneumo_2.png)|
 | --- | --- | --- | --- |
 |  |  |  |  |
-| Pred: NORMAL | Pred: NORMAL | Pred: PNEUMONIA | Pred: PNEUMONIA |
+| NORMAL 1|  NORMAL 1 | PNEUMONIA 1|  PNEUMONIA 2|
 
 ### 2. Temps d'exécution et Architecture Temps Réel
 
