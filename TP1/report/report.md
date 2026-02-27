@@ -74,9 +74,9 @@ device_count 1
 > Une image **“simple”** intéressante car, contrairement aux feuilles, elle n'est pas sur fond blanc : elle teste la gestion des ombres portées et du faible contraste sur le mur bleu.
 
 ### Cas simple:
-![PCA](./img/mockup-graphics-_mUVHhvBYZ0-unsplash.jpg)
+![PCA](../data/images/mockup-graphics-_mUVHhvBYZ0-unsplash.jpg)
 ### Cas complexe:
-![PCA](./img/adrian-rosco-stef-KGw1AOyBTQM-unsplash.jpg)
+![PCA](../data/images/adrian-rosco-stef-KGw1AOyBTQM-unsplash.jpg)
 
 ## Question 3 :
 
@@ -96,7 +96,7 @@ Le modèle fonctionne correctement et détecte le masque principal. L’inféren
 
 
 ![PCA](./img/overlay.png)
-![PCA](./img/overlay_hesam-link-ZPl1v83Im_I-unsplash.png)
+![PCA](../outputs/overlays/overlay_hesam-link-ZPl1v83Im_I-unsplash.png)
 
 ### 2. Tableau récapitulatif (Sélection de 3 images)
 
